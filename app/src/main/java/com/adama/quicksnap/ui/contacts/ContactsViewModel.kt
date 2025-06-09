@@ -22,9 +22,6 @@ class ContactsViewModel(
     private val _pendingRequests = MutableStateFlow<List<User>>(emptyList())
     val pendingRequests: StateFlow<List<User>> = _pendingRequests
 
-    private val _requestsSent = MutableStateFlow<List<FriendRequest>>(emptyList())
-    private val _requestsReceived = MutableStateFlow<List<FriendRequest>>(emptyList())
-
     private val _addableUsers = MutableStateFlow<List<User>>(emptyList())
     val addableUsers: StateFlow<List<User>> = _addableUsers
 

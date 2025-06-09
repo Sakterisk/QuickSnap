@@ -30,6 +30,7 @@ class AuthViewModel(
         auth.addAuthStateListener {
             _isLoggedIn.value = it.currentUser != null
         }
+        loadCurrentUser()
     }
 
     fun login(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
