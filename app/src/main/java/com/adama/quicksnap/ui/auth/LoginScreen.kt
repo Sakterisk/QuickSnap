@@ -79,8 +79,14 @@ fun LoginScreen(
                     error = "Please fill in all fields"
                 } else {
                     isLoading = true
-                    authViewModel.login(email, password) { errMsg ->
-                        error = errMsg
+                    authViewModel.login(email, password) { success, errMsg ->
+                        if (success) {
+                            navController.navigate("camera") {
+                                popUpTo("login") { inclusive = true }
+                            }
+                        } else {
+                            error = errMsg ?: "Login failed"
+                        }
                         isLoading = false
                     }
                 }

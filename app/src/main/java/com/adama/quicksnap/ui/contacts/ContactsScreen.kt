@@ -3,25 +3,58 @@ package com.adama.quicksnap.ui.contacts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactsScreen(
-    navController: NavController
-) {
-    Text("Example Contacts Screen", fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(16.dp))
+fun ContactsScreen(viewModel: ContactsViewModel = viewModel()) {
+    val friends by viewModel.friends.collectAsState()
+    var showAddSheet by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        viewModel.loadAddableUsers()
+        viewModel.loadFriends()
+        viewModel.loadPendingRequests()
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Contacts") },
+                actions = {
+                    IconButton(onClick = { showAddSheet = true }) {
+                        Icon(Icons.Default.Add, contentDescription = "Add Friend")
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Box(Modifier.padding(padding)) {
+            if (friends.isEmpty()) {
+                Text("No friends yet.", Modifier.align(Alignment.Center))
+            } else {
+                LazyColumn {
+                    items(friends) { friend ->
+                        ListItem(
+                            headlineContent = { Text(friend.username) }
+                        )
+                        Divider()
+                    }
+                }
+            }
+        }
+        if (showAddSheet) {
+            AddFriendSheet(
+                viewModel = viewModel,
+                onDismiss = { showAddSheet = false }
+            )
+        }
+    }
 }
+

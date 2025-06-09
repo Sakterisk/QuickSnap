@@ -5,7 +5,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,14 +21,16 @@ fun AccountScreen(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
-
+    val user by authViewModel.currentUser.collectAsState()
+    LaunchedEffect(Unit) {
+        authViewModel.loadCurrentUser()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
         Text(
             text = "Profile",
             fontSize = 24.sp,
@@ -39,7 +40,6 @@ fun AccountScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // User avatar
         Surface(
             modifier = Modifier
                 .size(120.dp)
@@ -58,6 +58,22 @@ fun AccountScreen(
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Display user information
+        Text(
+            text = "Name: ${user?.username ?: "Loading..."}",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Email: ${user?.email ?: "Loading..."}",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 

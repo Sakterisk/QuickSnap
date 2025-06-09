@@ -17,6 +17,7 @@ fun RegisterScreen(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
+    var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordConfirm by rememberSaveable { mutableStateOf("") }
@@ -33,6 +34,16 @@ fun RegisterScreen(
         Text("Register", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Name") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
             value = email,
@@ -78,8 +89,14 @@ fun RegisterScreen(
                     error = "Passwords do not match"
                 } else {
                     isLoading = true
-                    authViewModel.register(email, password) { errMsg ->
-                        error = errMsg
+                    authViewModel.register(name, email, password) { success, errMsg ->
+                        if (success) {
+                            navController.navigate("camera") {
+                                popUpTo("register") { inclusive = true }
+                            }
+                        } else {
+                            error = errMsg ?: "Registration failed"
+                        }
                         isLoading = false
                     }
                 }
