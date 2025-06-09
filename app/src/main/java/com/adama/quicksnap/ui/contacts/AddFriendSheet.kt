@@ -8,7 +8,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.adama.quicksnap.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,9 +36,9 @@ fun AddFriendSheet(
                 .padding(horizontal = 16.dp)
         ) {
             item {
-                Text("Friend Requests", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp))
+                Text(stringResource(R.string.friend_requests), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp))
                 if (pendingRequests.isEmpty()) {
-                    Text("No pending requests", modifier = Modifier.padding(vertical = 8.dp))
+                    Text(stringResource(R.string.no_pending_requests), modifier = Modifier.padding(vertical = 8.dp))
                 }
             }
             items(pendingRequests) { request ->
@@ -54,21 +56,21 @@ fun AddFriendSheet(
                             }
                         },
                         modifier = Modifier.padding(end = 4.dp)
-                    ) { Text("Accept") }
+                    ) { Text(stringResource(R.string.accept)) }
                     OutlinedButton(
                         onClick = {
                             scope.launch {
                                 viewModel.declineFriendRequest(request.uid) { _, _ -> }
                             }
                         }
-                    ) { Text("Decline") }
+                    ) { Text(stringResource(R.string.decline)) }
                 }
             }
             item {
                 Spacer(Modifier.height(16.dp))
                 HorizontalDivider()
                 Spacer(Modifier.height(16.dp))
-                Text("Add New Friend", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.add_new_friend), style = MaterialTheme.typography.titleMedium)
             }
             items(addableUsers) { user ->
                 Row(
@@ -84,7 +86,7 @@ fun AddFriendSheet(
                                 viewModel.sendFriendRequest(user.uid) { _, _ -> }
                             }
                         }
-                    ) { Text("Add") }
+                    ) { Text(stringResource(R.string.add)) }
                 }
             }
             item { Spacer(Modifier.height(16.dp)) }

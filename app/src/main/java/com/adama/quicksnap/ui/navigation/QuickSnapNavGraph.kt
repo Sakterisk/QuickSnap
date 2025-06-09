@@ -50,6 +50,5 @@ fun QuickSnapNavGraph(
         }
         composable("contacts") { ContactsScreen(contactsViewModel) }
         composable("account") { AccountScreen(navController, authViewModel) }
-        //composable("chat") { ChatScreen(navController) }
     }
 }

@@ -16,10 +16,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
+import com.adama.quicksnap.R
 import com.adama.quicksnap.data.model.Snap
 
 @Composable
@@ -44,7 +46,7 @@ fun SnapPreviewDialog(
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     AsyncImage(
                         model = snaps[currentIndex].imageUrl,
-                        contentDescription = "Snap",
+                        contentDescription = stringResource(R.string.snap),
                         modifier = Modifier.fillMaxSize()
                     )
                     Row(
@@ -54,15 +56,15 @@ fun SnapPreviewDialog(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         if (currentIndex > 0) {
-                            OutlinedButton(onClick = { currentIndex-- }) { Text("Back") }
+                            OutlinedButton(onClick = { currentIndex-- }) { Text(stringResource(R.string.back)) }
                         }
                         if (currentIndex < snaps.lastIndex) {
-                            Button(onClick = { currentIndex++ }) { Text("Next") }
+                            Button(onClick = { currentIndex++ }) { Text(stringResource(R.string.next)) }
                         } else {
                             Button(onClick = {
                                 onViewed(snaps.map { it.id })
                                 onClose()
-                            }) { Text("Close") }
+                            }) { Text(stringResource(R.string.close)) }
                         }
                     }
                 }

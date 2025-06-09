@@ -10,10 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.adama.quicksnap.R
 import com.adama.quicksnap.ui.auth.AuthViewModel
 
 @Composable
@@ -32,7 +34,7 @@ fun AccountScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Profile",
+            text = stringResource(R.string.profile),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 16.dp)
@@ -51,7 +53,7 @@ fun AccountScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(R.string.profile_picture),
                     modifier = Modifier.size(60.dp),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
@@ -62,7 +64,7 @@ fun AccountScreen(
 
         // Display user information
         Text(
-            text = "Name: ${user?.username ?: "Loading..."}",
+            text = stringResource(R.string.name, user?.username ?: stringResource(R.string.loading)),
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium
         )
@@ -70,7 +72,7 @@ fun AccountScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Email: ${user?.email ?: "Loading..."}",
+            text = stringResource(R.string.email, user?.email ?: stringResource(R.string.loading)),
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal
         )
@@ -94,12 +96,12 @@ fun AccountScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Logout",
+                    contentDescription = stringResource(R.string.logout),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Log Out",
+                    text = stringResource(R.string.log_out),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )

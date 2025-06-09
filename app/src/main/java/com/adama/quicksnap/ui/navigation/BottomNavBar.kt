@@ -6,8 +6,10 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.adama.quicksnap.R
 
 @Composable
 fun BottomNavBar(
@@ -15,9 +17,10 @@ fun BottomNavBar(
     isLoggedIn: Boolean
 ) {
     val navItems = listOf(
-        BottomNavItem("contacts", "Contacts", Icons.Filled.Groups),
-        BottomNavItem("camera", "Camera", Icons.Filled.CameraAlt),
-        getUserNavItem(isLoggedIn)
+        BottomNavItem(stringResource(R.string.contacts), stringResource(R.string.contacts), Icons.Filled.Groups),
+        BottomNavItem(stringResource(R.string.camera),
+            stringResource(R.string.camera), Icons.Filled.CameraAlt),
+        getUserNavItem(isLoggedIn, stringResource(R.string.account), stringResource(R.string.login))
     )
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

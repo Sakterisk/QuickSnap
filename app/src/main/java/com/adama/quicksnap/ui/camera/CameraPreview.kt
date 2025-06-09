@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.adama.quicksnap.R
 import java.io.File
 
 @Composable
@@ -69,7 +71,6 @@ fun CameraPreview(
                             imageCapture
                         )
                     } catch (e: Exception) {
-                        Log.e("CameraXPreview", "Camera binding failed", e)
                     }
                 }, ContextCompat.getMainExecutor(ctx))
                 previewView
@@ -86,7 +87,7 @@ fun CameraPreview(
         ) {
             Icon(
                 Icons.Default.Cameraswitch,
-                contentDescription = "Switch Camera",
+                contentDescription = stringResource(R.string.switch_camera),
                 tint = Color.White
             )
         }
@@ -100,7 +101,7 @@ fun CameraPreview(
         ) {
             Icon(
                 imageVector = Icons.Default.PhotoLibrary,
-                contentDescription = "Pick from Gallery",
+                contentDescription = stringResource(R.string.pick_from_gallery),
                 tint = Color.White
             )
         }
@@ -120,7 +121,8 @@ fun CameraPreview(
                             onPhotoCaptured(file.absolutePath, "file")
                         }
                         override fun onError(exception: ImageCaptureException) {
-                            Toast.makeText(context, "Capture failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context,
+                                context.getString(R.string.capture_failed), Toast.LENGTH_SHORT).show()
                         }
                     }
                 )

@@ -23,10 +23,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.adama.quicksnap.R
 
 @Composable
 fun LoginScreen(
@@ -39,6 +41,9 @@ fun LoginScreen(
     var error by rememberSaveable { mutableStateOf<String?>(null) }
     var isLoading by rememberSaveable { mutableStateOf(false) }
 
+    val fillAllFields = stringResource(R.string.fill_all_fields)
+    val loginFailed = stringResource(R.string.login_failed)
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -46,14 +51,14 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Log in", style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.log_in), style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email_1)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -64,7 +69,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -76,16 +81,14 @@ fun LoginScreen(
             onClick = {
                 error = null
                 if (email.isBlank() || password.isBlank()) {
-                    error = "Please fill in all fields"
+                    error = fillAllFields
                 } else {
                     isLoading = true
                     authViewModel.login(email, password) { success, errMsg ->
                         if (success) {
-                            navController.navigate("camera") {
-                                popUpTo("login") { inclusive = true }
-                            }
+                            navController.navigate("camera")
                         } else {
-                            error = errMsg ?: "Login failed"
+                            error = errMsg ?: loginFailed
                         }
                         isLoading = false
                     }
@@ -101,14 +104,14 @@ fun LoginScreen(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text("Log in")
+                Text(stringResource(R.string.log_in))
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
         TextButton(onClick = { navController.navigate("register") }) {
-            Text("Don't have an account? Register")
+            Text(stringResource(R.string.register_text))
         }
 
         error?.let {

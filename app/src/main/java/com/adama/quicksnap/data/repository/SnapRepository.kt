@@ -47,8 +47,7 @@ class SnapRepository {
     }
 
     suspend fun getSnaps(fromUserId: String, toUserId: String): List<Snap> {
-        val snapshot = FirebaseFirestore.getInstance()
-            .collection("snaps")
+        val snapshot = snapsRef
             .whereEqualTo("fromUserId", fromUserId)
             .whereEqualTo("toUserId", toUserId)
             .get()
@@ -59,9 +58,8 @@ class SnapRepository {
     }
 
     suspend fun deleteSnaps(snapIds: List<String>) {
-        val db = FirebaseFirestore.getInstance()
         snapIds.forEach { id ->
-            db.collection("snaps").document(id).delete().await()
+            snapsRef.document(id).delete().await()
         }
     }
 

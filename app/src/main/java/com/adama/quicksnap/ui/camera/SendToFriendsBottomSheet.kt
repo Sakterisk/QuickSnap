@@ -8,7 +8,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.adama.quicksnap.R
 import com.adama.quicksnap.data.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +26,7 @@ fun SendToFriendsBottomSheet(
         onDismissRequest = onDismiss
     ) {
         Text(
-            "Select friends",
+            stringResource(R.string.select_friends),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(16.dp)
         )
@@ -64,9 +66,9 @@ fun SendToFriendsBottomSheet(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            OutlinedButton(onClick = onDismiss) { Text("Cancel") }
+            OutlinedButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
             Spacer(Modifier.width(8.dp))
-            Button(onClick = onSend, enabled = selectedFriends.isNotEmpty()) { Text("Send") }
+            Button(onClick = onSend, enabled = selectedFriends.isNotEmpty()) { Text(stringResource(R.string.send)) }
         }
     }
 }

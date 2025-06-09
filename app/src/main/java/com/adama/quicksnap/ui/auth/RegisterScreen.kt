@@ -7,10 +7,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import com.adama.quicksnap.R
 
 @Composable
 fun RegisterScreen(
@@ -24,6 +26,10 @@ fun RegisterScreen(
     var error by rememberSaveable { mutableStateOf<String?>(null) }
     var isLoading by rememberSaveable { mutableStateOf(false) }
 
+    val fillAllFields = stringResource(R.string.fill_all_fields)
+    val passwordsDoNotMatch = stringResource(R.string.passwords_do_not_match)
+    val registrationFailed = stringResource(R.string.registration_failed)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,14 +37,14 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Register", style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.register), style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Name") },
+            label = { Text(stringResource(R.string.name)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -48,7 +54,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email_1)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -59,7 +65,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -71,7 +77,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = passwordConfirm,
             onValueChange = { passwordConfirm = it },
-            label = { Text("Confirm Password") },
+            label = { Text(stringResource(R.string.confirm_password)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -84,9 +90,9 @@ fun RegisterScreen(
             onClick = {
                 error = null
                 if (email.isBlank() || password.isBlank() || passwordConfirm.isBlank()) {
-                    error = "Please fill in all fields"
+                    error = fillAllFields
                 } else if (password != passwordConfirm) {
-                    error = "Passwords do not match"
+                    error = passwordsDoNotMatch
                 } else {
                     isLoading = true
                     authViewModel.register(name, email, password) { success, errMsg ->
@@ -95,7 +101,7 @@ fun RegisterScreen(
                                 popUpTo("register") { inclusive = true }
                             }
                         } else {
-                            error = errMsg ?: "Registration failed"
+                            error = errMsg ?: registrationFailed
                         }
                         isLoading = false
                     }
@@ -111,14 +117,14 @@ fun RegisterScreen(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text("Register")
+                Text(stringResource(R.string.register))
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
         TextButton(onClick = { navController.navigate("login") }) {
-            Text("Already have an account? Log in")
+            Text(stringResource(R.string.log_in_text))
         }
 
         error?.let {

@@ -14,8 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.adama.quicksnap.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,10 +38,10 @@ fun ContactsScreen(viewModel: ContactsViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Contacts") },
+                title = { Text(stringResource(R.string.contacts)) },
                 actions = {
                     IconButton(onClick = { showAddSheet = true }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add Friend")
+                        Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_friend))
                     }
                 }
             )
@@ -47,7 +49,7 @@ fun ContactsScreen(viewModel: ContactsViewModel = viewModel()) {
     ) { padding ->
         Box(Modifier.padding(padding)) {
             if (friends.isEmpty()) {
-                Text("No friends yet.", Modifier.align(Alignment.Center))
+                Text(stringResource(R.string.no_friends_yet), Modifier.align(Alignment.Center))
             } else {
                 LazyColumn {
                     items(friends) { friend ->

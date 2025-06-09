@@ -29,7 +29,9 @@ fun CameraScreen(
     var hasCameraPermission by remember { mutableStateOf(false) }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { granted -> hasCameraPermission = granted }
+    ) {
+        granted -> hasCameraPermission = granted
+    }
     LaunchedEffect(Unit) { permissionLauncher.launch(Manifest.permission.CAMERA) }
 
     if (isPreviewVisible && photoUri != null) {
