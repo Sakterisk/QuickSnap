@@ -84,7 +84,11 @@ fun CameraPreview(
                 .padding(24.dp)
                 .size(48.dp)
         ) {
-            Icon(Icons.Default.Cameraswitch, contentDescription = "Switch Camera")
+            Icon(
+                Icons.Default.Cameraswitch,
+                contentDescription = "Switch Camera",
+                tint = Color.White
+            )
         }
 
         IconButton(

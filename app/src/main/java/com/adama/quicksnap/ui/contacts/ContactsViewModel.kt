@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adama.quicksnap.data.model.Friend
 import com.adama.quicksnap.data.model.FriendRequest
+import com.adama.quicksnap.data.model.Snap
 import com.adama.quicksnap.data.model.User
 import com.adama.quicksnap.data.repository.FriendRepository
 import com.adama.quicksnap.data.repository.FriendRequestRepository
+import com.adama.quicksnap.data.repository.SnapRepository
 import com.adama.quicksnap.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 class ContactsViewModel(
     private val userRepository: UserRepository = UserRepository(),
     private val friendRepository: FriendRepository = FriendRepository(),
-    private val friendRequestRepository: FriendRequestRepository = FriendRequestRepository()
+    private val friendRequestRepository: FriendRequestRepository = FriendRequestRepository(),
+    private val snapRepository: SnapRepository = SnapRepository()
 ) : ViewModel() {
 
     private val _pendingRequests = MutableStateFlow<List<User>>(emptyList())
@@ -27,6 +30,12 @@ class ContactsViewModel(
 
     private val _friends = MutableStateFlow<List<User>>(emptyList())
     val friends: StateFlow<List<User>> = _friends
+
+    private val _receivedSnaps = MutableStateFlow<List<Snap>>(emptyList())
+    val receivedSnaps: StateFlow<List<Snap>> = _receivedSnaps
+
+    private val _friendsWithSnaps = MutableStateFlow<Set<String>>(emptySet())
+    val friendsWithSnaps: StateFlow<Set<String>> = _friendsWithSnaps
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -68,6 +77,24 @@ class ContactsViewModel(
                             !sentRequestIds.contains(user.uid) &&
                             !receivedRequestIds.contains(user.uid)
                 }
+            }
+        }
+    }
+
+    fun loadSnapsFromFriend(friendId: String) {
+        currentUserId?.let { uid ->
+            viewModelScope.launch {
+                _receivedSnaps.value = snapRepository.getSnaps(fromUserId = friendId, toUserId = uid)
+            }
+        }
+    }
+
+
+    fun loadFriendsWithSnaps() {
+        currentUserId?.let { uid ->
+            viewModelScope.launch {
+                val snaps = snapRepository.getSnapsForUser(uid)
+                _friendsWithSnaps.value = snaps.map { it.fromUserId }.toSet()
             }
         }
     }
@@ -117,6 +144,13 @@ class ContactsViewModel(
                     onResult(false, e.message)
                 }
             }
+        }
+    }
+
+    fun deleteSnaps(snapIds: List<String>) {
+        viewModelScope.launch {
+            snapRepository.deleteSnaps(snapIds)
+            _receivedSnaps.value = emptyList()
         }
     }
 }

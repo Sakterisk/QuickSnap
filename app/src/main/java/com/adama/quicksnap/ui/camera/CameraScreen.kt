@@ -24,7 +24,7 @@ fun CameraScreen(
     val selectedFriends by viewModel.selectedFriends.collectAsState()
     val isSending by viewModel.isSending.collectAsState()
 
-    var showSendDialog by rememberSaveable { mutableStateOf(false) }
+    var showSendSheet by rememberSaveable { mutableStateOf(false) }
 
     var hasCameraPermission by remember { mutableStateOf(false) }
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -35,7 +35,7 @@ fun CameraScreen(
     if (isPreviewVisible && photoUri != null) {
         PhotoPreview(
             photoUri = photoUri!!,
-            onSend = { showSendDialog = true },
+            onSend = { showSendSheet = true },
             onSave = { com.adama.quicksnap.utils.ImageUtils.saveImageToGallery(context, photoUri!!) },
             onClose = { viewModel.setPhotoUri(null) }
         )
@@ -54,18 +54,18 @@ fun CameraScreen(
         )
     }
 
-    if (showSendDialog && photoUri != null) {
-        SendToFriendsDialog(
+    if (showSendSheet && photoUri != null) {
+        SendToFriendsBottomSheet(
             friends = friends,
             selectedFriends = selectedFriends,
             onSelectionChange = { viewModel.setSelectedFriends(it) },
             onSend = {
                 viewModel.sendSnap(context, fromUserId, selectedFriends) {
-                    showSendDialog = false
+                    showSendSheet = false
                     onSendComplete()
                 }
             },
-            onDismiss = { showSendDialog = false }
+            onDismiss = { showSendSheet = false }
         )
     }
 

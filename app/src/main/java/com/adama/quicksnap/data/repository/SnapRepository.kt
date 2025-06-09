@@ -31,6 +31,7 @@ class SnapRepository {
             val downloadUrl = storageRef.downloadUrl.await()
             toUserIds.forEach { toUserId ->
                 val snap = Snap(
+                    id = UUID.randomUUID().toString(),
                     fromUserId = fromUserId,
                     toUserId = toUserId,
                     imageUrl = downloadUrl.toString(),
@@ -45,8 +46,29 @@ class SnapRepository {
         }
     }
 
+    suspend fun getSnaps(fromUserId: String, toUserId: String): List<Snap> {
+        val snapshot = FirebaseFirestore.getInstance()
+            .collection("snaps")
+            .whereEqualTo("fromUserId", fromUserId)
+            .whereEqualTo("toUserId", toUserId)
+            .get()
+            .await()
+        return snapshot.documents.map { doc ->
+            doc.toObject(Snap::class.java)!!.copy(id = doc.id)
+        }
+    }
+
+    suspend fun deleteSnaps(snapIds: List<String>) {
+        val db = FirebaseFirestore.getInstance()
+        snapIds.forEach { id ->
+            db.collection("snaps").document(id).delete().await()
+        }
+    }
+
     suspend fun getSnapsForUser(userId: String): List<Snap> {
         val snapshot = snapsRef.whereEqualTo("toUserId", userId).get().await()
-        return snapshot.toObjects(Snap::class.java)
+        return snapshot.documents.map { doc ->
+            doc.toObject(Snap::class.java)!!.copy(id = doc.id)
+        }
     }
 }
